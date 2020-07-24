@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Weather Dashboard</title>
+
+  <!-- Bootstrap CSS CDN  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+
+  <!-- Font Awesome CSS Icons (For cool glyphicons) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+  <!--Page Header Title-->
+  <div class="page-header"style="background-color: black ; color: white; height:65px">
+    <h1 class="text-center">Weather Dashboard</h1>
+  </div>
+<div class="container">
+
+  <!--Another City Search button-->
+  <form id="city-form">
+    <label for="city-input">Search for a City:</label>
+    <br>
+    <span><input type="text" id="city-input"></span>
+
+    <!-- Button triggers new city to be added -->
+    <button id="search-city" type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+  </form>
+
+  <div id="city-weather">
+    <div class="card">
+      <div class="cardbody">
+        <h4>
+          <div id="city"></div>
+          <div id="date"></div>
+        </h4>
+          <div id="temp"></div>
+          <br>
+          <div id="humid"></div>
+          <br>
+          <div id="windspeed"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--JQuery,Java-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    // This is our API key. Add your own API key between the ""
+    // Your API key is cbcf21e420341aefa9127dd3dc82494c
+$("#search-city").on("click", function(event){
+
+    event.preventDefault();
+
+    var city = $("#city-input").val();
+    console.log(city);
+    var APIKey = "cbcf21e420341aefa9127dd3dc82494c";
+
+    // Here we are building the URL we need to query the database
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=" + APIKey;
+
+    //create an AJAX call
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+      console.log(queryURL);
+      console.log(response);
+      //console.log(response.name);
+      var city = response.name;
+      $('#city').append(city);
+      console.log(city);
+      var temp = response.main.temp;
+      var tempF = Math.floor((response.main.temp - 273.15)*1.8 + 32);
+      console.log(temp)
+      $('#temp').html("Temperature: " + temp) + "F";
+      var humidity = response.main.humidity;
+      console.log(humidity);
+      $('#humid').html("Humidity: " + humidity + "%");
+      var windSpeed = response.wind.speed;
+      console.log(windSpeed);
+      $('#windspeed').html("Wind Speed: " + windSpeed + "MPH");
+
+    });
+
+  });
+  </script>
+</div>
+</body>
+</html>
